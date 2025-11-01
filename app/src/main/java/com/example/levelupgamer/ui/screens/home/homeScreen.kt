@@ -28,7 +28,7 @@ fun HomeScreen(navController: NavController) {
             ModalDrawerSheet(
                 modifier = Modifier
                     .width(220.dp)
-                    .background(Color.Gray)
+                    .background(Color.Black)
             ) {
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -63,6 +63,28 @@ fun HomeScreen(navController: NavController) {
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
+
+
+                NavigationDrawerItem(
+                    label = { Text("Sobre Nosotros", color = Color(0xFF39FF14), fontFamily = FontFamily.Default) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("nosotros")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+
+
+                NavigationDrawerItem(
+                    label = { Text("Contacto", color = Color(0xFF39FF14), fontFamily = FontFamily.Default) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("contacto")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
             }
         }
     ) {
@@ -89,8 +111,8 @@ fun HomeScreen(navController: NavController) {
                     .fillMaxSize()
                     .padding(paddingValues)
                     .background(Color.Black),
-                horizontalAlignment = Alignment.CenterHorizontally, // centra horizontalmente
-                verticalArrangement = Arrangement.Top // mantiene vertical en la parte superior
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
             ) {
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -100,7 +122,7 @@ fun HomeScreen(navController: NavController) {
                     fontFamily = FontFamily.Default,
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth() // necesario para centrar horizontalmente
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

@@ -12,7 +12,9 @@ import com.example.levelupgamer.ui.screens.register.RegisterScreen
 import com.example.levelupgamer.ui.screens.home.HomeScreen
 import com.example.levelupgamer.ui.screens.producto.ProductoListScreen
 import com.example.levelupgamer.ui.screens.producto.ProductoDetailScreen
-
+import com.example.levelupgamer.ui.screens.carrito.CarritoScreen
+import com.example.levelupgamer.ui.screens.welcome.NosotrosScreen
+import com.example.levelupgamer.ui.screens.welcome.ContactoScreen
 
 @Composable
 fun AppNavigation() {
@@ -24,6 +26,9 @@ fun AppNavigation() {
         composable("register") { RegisterScreen(navController) }
         composable("home") { HomeScreen(navController) }
         composable("productos") { ProductoListScreen(navController) }
+        composable("carrito") { CarritoScreen(navController) }
+        composable("nosotros") { NosotrosScreen(navController) }
+        composable("contacto") { ContactoScreen(navController) }
         composable(
             route = "productoDetalle/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })

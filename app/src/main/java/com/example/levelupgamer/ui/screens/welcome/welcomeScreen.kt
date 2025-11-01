@@ -20,7 +20,7 @@ fun WelcomeScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black) // Fondo negro
+            .background(Color.Black)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -30,8 +30,8 @@ fun WelcomeScreen(navController: NavController) {
             text = "¡Bienvenido a LevelUP-Gamer!",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF39FF14), // Verde neón
-            fontFamily = FontFamily.Default // Cambiar a Roboto si la tienes importada
+            color = Color(0xFF39FF14),
+            fontFamily = FontFamily.Default
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -40,7 +40,7 @@ fun WelcomeScreen(navController: NavController) {
             text = "Tu tienda gamer favorita",
             textAlign = TextAlign.Center,
             fontSize = 16.sp,
-            color = Color(0xFF39FF14), // Verde neón
+            color = Color(0xFF39FF14),
             fontFamily = FontFamily.Default
         )
 
