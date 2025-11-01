@@ -48,7 +48,7 @@ fun MainScreen(navController: NavController) {
             )
             Tab(
                 selected = currentScreen == "login",
-                onClick = { currentScreen = "login" },
+                onClick = {navController.navigate("login")},
                 text = { Text("Iniciar Sesión") }
             )
             Tab(
