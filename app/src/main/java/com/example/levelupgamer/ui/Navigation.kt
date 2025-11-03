@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.example.levelupgamer.ui.screens.EditProductoScreen
 import com.example.levelupgamer.ui.screens.MainLayout
 import com.example.levelupgamer.ui.screens.ScannerScreen
 import com.example.levelupgamer.ui.screens.carrito.CarritoScreen
@@ -32,6 +33,7 @@ import com.example.levelupgamer.ui.screens.welcome.ContactoScreen
 import com.example.levelupgamer.ui.screens.welcome.NosotrosScreen
 import com.example.levelupgamer.ui.screens.welcome.WelcomeScreen
 import com.example.levelupgamer.viewmodel.CarritoViewModel
+import com.example.levelupgamer.viewmodel.ProductoViewModel
 import com.example.levelupgamer.viewmodel.UserViewModel
 
 @Composable
@@ -39,6 +41,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val userViewModel: UserViewModel = viewModel()
     val carritoViewModel: CarritoViewModel = viewModel()
+    val productoViewModel: ProductoViewModel = viewModel()
     val cantidadCarrito = carritoViewModel.getCantidadTotal()
 
     NavHost(navController, startDestination = "welcome") {
@@ -66,9 +69,9 @@ fun AppNavigation() {
                         }
                     }
                 }
-            ) { ProductoListScreen(navController, userViewModel) }
+            ) { ProductoListScreen(navController, userViewModel, productoViewModel) }
         }
-        composable("agregarProducto") { MainLayout(navController = navController, title = "Agregar Producto") { AgregarProductoScreen(navController) } }
+        composable("agregarProducto") { MainLayout(navController = navController, title = "Agregar Producto") { AgregarProductoScreen(navController, productoViewModel) } }
         composable("nosotros") { MainLayout(navController = navController, title = "Sobre Nosotros") { NosotrosScreen(navController) } }
         composable("contacto") { MainLayout(navController = navController, title = "Contacto") { ContactoScreen(navController) } }
         composable("miCuenta") { MainLayout(navController = navController, title = "Mi Cuenta") { MiCuentaScreen(navController, userViewModel) } }
@@ -81,6 +84,14 @@ fun AppNavigation() {
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: 0
             MainLayout(navController = navController, title = "Detalle del Producto") { ProductoDetailScreen(navController, id) }
+        }
+
+        composable(
+            route = "editProducto/{productoId}",
+            arguments = listOf(navArgument("productoId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val productoId = backStackEntry.arguments?.getInt("productoId") ?: 0
+            MainLayout(navController = navController, title = "Editar Producto") { EditProductoScreen(navController, productoViewModel, productoId) }
         }
     }
 }
