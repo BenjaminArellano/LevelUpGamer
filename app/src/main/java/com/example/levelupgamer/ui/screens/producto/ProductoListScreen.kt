@@ -27,7 +27,7 @@ fun ProductoListScreen(navController: NavController) {
     val productoViewModel: ProductoViewModel = viewModel()
     val carritoViewModel: CarritoViewModel = viewModel()
     val productos by productoViewModel.productos.collectAsState()
-    val cantidadCarrito by carritoViewModel.cantidadCarrito.collectAsState()
+    val cantidadCarrito = carritoViewModel.getCantidadTotal()
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()

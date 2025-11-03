@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -82,7 +83,7 @@ fun CarritoScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(
                             onClick = {
-                                // Aquí puedes agregar la lógica para finalizar compra
+
                             },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(
@@ -145,7 +146,7 @@ fun CarritoScreen(navController: NavController) {
                     .background(Color.Black)
                     .padding(16.dp)
             ) {
-                items(productosCarrito) { producto ->
+                items(productosCarrito) { carritoItem ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -160,29 +161,68 @@ fun CarritoScreen(navController: NavController) {
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text(
-                                    producto.nombre,
+                                    carritoItem.nombre,
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color(0xFF39FF14),
                                     fontFamily = FontFamily.Default
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    producto.descripcion,
+                                    carritoItem.descripcion,
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = Color(0xFFD3D3D3),
                                     fontFamily = FontFamily.Default
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    "$${producto.precio}",
+                                    "$${carritoItem.precio} x ${carritoItem.cantidad}",
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = Color(0xFF1E90FF),
                                     fontFamily = FontFamily.Default,
                                     fontWeight = FontWeight.Bold
                                 )
+                                Text(
+                                    "Subtotal: $${String.format("%.2f", carritoItem.precio * carritoItem.cantidad)}",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color(0xFF39FF14)
+                                )
                             }
+
+                            // Controles de cantidad
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        carritoViewModel.actualizarCantidad(carritoItem, carritoItem.cantidad + 1)
+                                    }
+                                ) {
+                                    Icon(
+                                        Icons.Default.Add,
+                                        contentDescription = "Aumentar",
+                                        tint = Color(0xFF39FF14)
+                                    )
+                                }
+                                Text(
+                                    carritoItem.cantidad.toString(),
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                IconButton(
+                                    onClick = {
+                                        carritoViewModel.actualizarCantidad(carritoItem, carritoItem.cantidad - 1)
+                                    }
+                                ) {
+                                    Icon(
+                                        Icons.Default.Delete,
+                                        contentDescription = "Disminuir",
+                                        tint = Color(0xFF1E90FF)
+                                    )
+                                }
+                            }
+
                             IconButton(
-                                onClick = { carritoViewModel.eliminarDelCarrito(producto) }
+                                onClick = { carritoViewModel.eliminarDelCarrito(carritoItem) }
                             ) {
                                 Icon(
                                     Icons.Default.Delete,

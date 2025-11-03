@@ -1,50 +1,89 @@
 package com.example.levelupgamer.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.levelupgamer.data.database.CarritoDatabase
+import com.example.levelupgamer.data.model.CarritoItem
 import com.example.levelupgamer.data.model.Producto
+import com.example.levelupgamer.data.repository.CarritoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CarritoViewModel : ViewModel() {
+class CarritoViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _productosCarrito = MutableStateFlow<List<Producto>>(emptyList())
-    val productosCarrito: StateFlow<List<Producto>> = _productosCarrito.asStateFlow()
+    private val carritoDao = CarritoDatabase.getDatabase(application).carritoDao()
+    private val carritoRepository = CarritoRepository(carritoDao)
+
+    private val _productosCarrito = MutableStateFlow<List<CarritoItem>>(emptyList())
+    val productosCarrito: StateFlow<List<CarritoItem>> = _productosCarrito.asStateFlow()
 
     private val _totalCarrito = MutableStateFlow(0.0)
     val totalCarrito: StateFlow<Double> = _totalCarrito.asStateFlow()
 
-    private val _cantidadCarrito = MutableStateFlow(0)
-    val cantidadCarrito: StateFlow<Int> = _cantidadCarrito.asStateFlow()
-
-    fun agregarAlCarrito(producto: Producto) {
+    init {
+        // Cargar los productos del carrito desde la base de datos al iniciar
         viewModelScope.launch {
-            _productosCarrito.value = _productosCarrito.value + producto
-            calcularTotal()
-            _cantidadCarrito.value = _productosCarrito.value.size // Actualizamos la cantidad
+            carritoRepository.getAllCarritoItems().collect { carritoItems ->
+                _productosCarrito.value = carritoItems
+                calcularTotal()
+            }
         }
     }
 
-    fun eliminarDelCarrito(producto: Producto) {
+    fun agregarAlCarrito(producto: Producto) {
         viewModelScope.launch {
-            _productosCarrito.value = _productosCarrito.value.filter { it.id != producto.id }
-            calcularTotal()
-            _cantidadCarrito.value = _productosCarrito.value.size // Actualizamos la cantidad
+            // Verificar si el producto ya está en el carrito
+            val existingItem = carritoRepository.getCarritoItemByProductId(producto.id)
+
+            if (existingItem != null) {
+                // Si ya existe, aumentar la cantidad
+                val updatedItem = existingItem.copy(cantidad = existingItem.cantidad + 1)
+                carritoRepository.update(updatedItem)
+            } else {
+                // Si no existe, agregar nuevo item
+                val carritoItem = CarritoItem(
+                    productoId = producto.id,
+                    nombre = producto.nombre,
+                    descripcion = producto.descripcion,
+                    precio = producto.precio,
+                    cantidad = 1
+                )
+                carritoRepository.insert(carritoItem)
+            }
+        }
+    }
+
+    fun eliminarDelCarrito(carritoItem: CarritoItem) {
+        viewModelScope.launch {
+            carritoRepository.delete(carritoItem)
+        }
+    }
+
+    fun actualizarCantidad(carritoItem: CarritoItem, nuevaCantidad: Int) {
+        viewModelScope.launch {
+            if (nuevaCantidad > 0) {
+                val updatedItem = carritoItem.copy(cantidad = nuevaCantidad)
+                carritoRepository.update(updatedItem)
+            } else {
+                carritoRepository.delete(carritoItem)
+            }
         }
     }
 
     fun limpiarCarrito() {
         viewModelScope.launch {
-            _productosCarrito.value = emptyList()
-            calcularTotal()
-            _cantidadCarrito.value = 0 // Actualizamos la cantidad
+            carritoRepository.deleteAll()
         }
     }
 
     private fun calcularTotal() {
-        _totalCarrito.value = _productosCarrito.value.sumOf { it.precio }
+        _totalCarrito.value = _productosCarrito.value.sumOf { it.precio * it.cantidad }
     }
 
+    fun getCantidadTotal(): Int {
+        return _productosCarrito.value.sumOf { it.cantidad }
+    }
 }
