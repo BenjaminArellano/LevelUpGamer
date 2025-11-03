@@ -1,7 +1,6 @@
 package com.example.levelupgamer.ui.screens.producto
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,8 +16,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.levelupgamer.viewmodel.ProductoViewModel
 import com.example.levelupgamer.viewmodel.CarritoViewModel
+import com.example.levelupgamer.viewmodel.ProductoViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +38,10 @@ fun ProductoListScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     "Menú",
-                    style = MaterialTheme.typography.titleMedium.copy(color = Color(0xFF39FF14), fontFamily = FontFamily.Default),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = Color(0xFF39FF14),
+                        fontFamily = FontFamily.Default
+                    ),
                     modifier = Modifier.padding(16.dp)
                 )
 
@@ -74,7 +76,6 @@ fun ProductoListScreen(navController: NavController) {
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
-
 
                 NavigationDrawerItem(
                     label = { Text("Contacto", color = Color(0xFF39FF14), fontFamily = FontFamily.Default) },
@@ -120,14 +121,11 @@ fun ProductoListScreen(navController: NavController) {
                         }
                     },
                     actions = {
-                        // Icono del carrito con badge
                         IconButton(onClick = { navController.navigate("carrito") }) {
                             Box {
                                 Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito", tint = Color(0xFF39FF14))
                                 if (cantidadCarrito > 0) {
-                                    Badge(
-                                        modifier = Modifier.align(Alignment.TopEnd)
-                                    ) {
+                                    Badge(modifier = Modifier.align(Alignment.TopEnd)) {
                                         Text(cantidadCarrito.toString(), color = Color.White)
                                     }
                                 }
@@ -141,71 +139,80 @@ fun ProductoListScreen(navController: NavController) {
             }
         ) { innerPadding ->
 
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
                     .background(Color.Black)
                     .padding(16.dp)
             ) {
-                items(productos) { producto ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
-                    ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                producto.nombre,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color(0xFF39FF14),
-                                fontFamily = FontFamily.Default
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                producto.descripcion,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color(0xFF39FF14),
-                                fontFamily = FontFamily.Default
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                "$${producto.precio}",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = Color(0xFF39FF14),
-                                fontFamily = FontFamily.Default
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
 
-                            // Botón Agregar al Carrito
-                            Button(
-                                onClick = {
-                                    carritoViewModel.agregarAlCarrito(producto)
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF1E90FF),
-                                    contentColor = Color.White
-                                )
-                            ) {
-                                Text("Agregar al Carrito")
-                            }
-
-
-                            TextButton(
-                                onClick = {
-                                    navController.navigate("productoDetalle/${producto.id}")
-                                },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(productos) { producto ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
                                 Text(
-                                    "Ver Detalles",
-                                    color = Color(0xFF39FF14)
+                                    producto.nombre,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = Color(0xFF39FF14),
+                                    fontFamily = FontFamily.Default
                                 )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    producto.descripcion,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color(0xFF39FF14),
+                                    fontFamily = FontFamily.Default
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    "$${producto.precio}",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Color(0xFF39FF14),
+                                    fontFamily = FontFamily.Default
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Button(
+                                    onClick = { carritoViewModel.agregarAlCarrito(producto) },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color(0xFF1E90FF),
+                                        contentColor = Color.White
+                                    )
+                                ) {
+                                    Text("Agregar al Carrito")
+                                }
+
+                                TextButton(
+                                    onClick = { navController.navigate("productoDetalle/${producto.id}") },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Ver Detalles", color = Color(0xFF39FF14))
+                                }
                             }
                         }
                     }
+                }
+
+                // ----------------- BOTÓN AGREGAR PRODUCTO -----------------
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = { navController.navigate("agregarProducto") }, // Asegúrate de tener esta ruta en AppNavigation
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF39FF14),
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text("Agregar Producto")
                 }
             }
         }

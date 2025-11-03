@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductoDao {
-
     @Query("SELECT * FROM producto")
     fun getAllProductos(): Flow<List<Producto>>
 
