@@ -70,4 +70,14 @@ dependencies {
     // ZXing QR Code Scanner
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
 }

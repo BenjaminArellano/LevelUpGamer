@@ -28,6 +28,7 @@ import com.example.levelupgamer.ui.screens.login.LoginScreen
 import com.example.levelupgamer.ui.screens.producto.AgregarProductoScreen
 import com.example.levelupgamer.ui.screens.producto.ProductoDetailScreen
 import com.example.levelupgamer.ui.screens.producto.ProductoListScreen
+import com.example.levelupgamer.ui.screens.producto.ApiProductListScreen
 import com.example.levelupgamer.ui.screens.register.RegisterScreen
 import com.example.levelupgamer.ui.screens.welcome.ContactoScreen
 import com.example.levelupgamer.ui.screens.welcome.NosotrosScreen
@@ -70,6 +71,9 @@ fun AppNavigation() {
                     }
                 }
             ) { ProductoListScreen(navController, userViewModel, productoViewModel) }
+        }
+        composable("productos_api") { // Nueva ruta
+            MainLayout(navController = navController, title = "Productos de la API") { ApiProductListScreen() }
         }
         composable("agregarProducto") { MainLayout(navController = navController, title = "Agregar Producto") { AgregarProductoScreen(navController, productoViewModel) } }
         composable("nosotros") { MainLayout(navController = navController, title = "Sobre Nosotros") { NosotrosScreen(navController) } }

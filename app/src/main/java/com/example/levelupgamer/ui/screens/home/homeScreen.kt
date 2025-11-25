@@ -4,6 +4,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,5 +62,14 @@ fun HomeScreen(navController: NavController, userViewModel: UserViewModel) {
                 .size(150.dp)
                 .scale(scale)
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Button(
+            onClick = { navController.navigate("productos_api") },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF39FF14))
+        ) {
+            Text("Ver productos de la API", color = Color.Black)
+        }
     }
 }
