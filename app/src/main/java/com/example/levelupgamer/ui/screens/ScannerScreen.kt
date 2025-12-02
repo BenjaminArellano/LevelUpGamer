@@ -2,6 +2,7 @@ package com.example.levelupgamer.ui.screens
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,12 +21,23 @@ fun ScannerScreen() {
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = {
-            val result = IntentIntegrator.parseActivityResult(it.resultCode, it.data)
-            if (result.contents == null) {
-                Toast.makeText(context, "Escaneo cancelado", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(context, "Resultado: ${result.contents}", Toast.LENGTH_LONG).show()
+        onResult = { activityResult ->
+            val result = IntentIntegrator.parseActivityResult(activityResult.resultCode, activityResult.data)
+            if (result != null) {
+                if (result.contents == null) {
+                    Toast.makeText(context, "Escaneo cancelado", Toast.LENGTH_LONG).show()
+                } else {
+                    val scannedUrl = result.contents
+                    Toast.makeText(context, "Redirigiendo a: $scannedUrl", Toast.LENGTH_LONG).show()
+
+                    // Intentar abrir la URL en el navegador
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(scannedUrl))
+                        context.startActivity(intent)
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Error al abrir el enlace: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         }
     )
