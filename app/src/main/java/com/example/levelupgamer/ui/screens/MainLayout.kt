@@ -32,6 +32,7 @@ fun MainLayout(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = false, // Desactiva el gesto de deslizamiento para abrir
         drawerContent = {
             ModalDrawerSheet(
                 modifier = Modifier

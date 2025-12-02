@@ -41,7 +41,7 @@ fun AgregarProductoScreen(navController: NavController, vm: ProductoViewModel = 
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
-            label = { Text("Nombre", color = Color(0xFF39FF14)) },
+            label = { Text("Nombre", color = Color(0xFF33DC13)) },
             textStyle = LocalTextStyle.current.copy(color = Color(0xFF39FF14)),
             modifier = Modifier.fillMaxWidth()
         )

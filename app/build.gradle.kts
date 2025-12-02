@@ -80,4 +80,28 @@ dependencies {
     //Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+    // OpenStreetMap (osmdroid)
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
+
+    // TEST DEPENDENCIES (CONFIGURACIÓN CORRECTA Y LIMPIA)
+    // Kotest (solo estas 2 son necesarias)
+    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
+    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
+    // MockK
+    testImplementation("io.mockk:mockk:1.13.10")
+    // Coroutines Test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+    // AndroidX Test
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    // JUnit 5 (API y Engine)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform() // <<< NECESARIO
+    testLogging {
+        events("passed", "failed", "skipped")
+    }
 }

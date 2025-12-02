@@ -69,7 +69,7 @@ fun HomeScreen(navController: NavController, userViewModel: UserViewModel) {
             onClick = { navController.navigate("productos_api") },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF39FF14))
         ) {
-            Text("Ver productos de la API", color = Color.Black)
+            Text("Productos proximo mes", color = Color.Black)
         }
     }
 }
